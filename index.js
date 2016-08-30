@@ -15,36 +15,6 @@ class BlockQuote extends Block {
 }
 exports.BlockQuote = BlockQuote
 
-// ;; An ordered list node type. Has a single attribute, `order`,
-// which determines the number at which the list starts counting, and
-// defaults to 1.
-class OrderedList extends Block {
-  get attrs() { return {order: new Attribute({default: 1})} }
-  get matchDOMTag() {
-    return {"ol": dom => ({
-      order: dom.hasAttribute("start") ? +dom.getAttribute("start") : 1
-    })}
-  }
-  toDOM(node) {
-    return ["ol", {start: node.attrs.order == 1 ? null : node.attrs.order}, 0]
-  }
-}
-exports.OrderedList = OrderedList
-
-// ;; A bullet list node type.
-class BulletList extends Block {
-  get matchDOMTag() { return {"ul": null} }
-  toDOM() { return ["ul", 0] }
-}
-exports.BulletList = BulletList
-
-// ;; A list item node type.
-class ListItem extends Block {
-  get matchDOMTag() { return {"li": null} }
-  toDOM() { return ["li", 0] }
-}
-exports.ListItem = ListItem
-
 // ;; A node type for horizontal rules.
 class HorizontalRule extends Block {
   get matchDOMTag() { return {"hr": null} }
@@ -179,13 +149,9 @@ const schema = new Schema({
 
     paragraph: {type: Paragraph, content: "inline<_>*", group: "block"},
     blockquote: {type: BlockQuote, content: "block+", group: "block"},
-    ordered_list: {type: OrderedList, content: "list_item+", group: "block"},
-    bullet_list: {type: BulletList, content: "list_item+", group: "block"},
     horizontal_rule: {type: HorizontalRule, group: "block"},
     heading: {type: Heading, content: "inline<_>*", group: "block"},
     code_block: {type: CodeBlock, content: "text*", group: "block"},
-
-    list_item: {type: ListItem, content: "paragraph block*"},
 
     text: {type: Text, group: "inline"},
     image: {type: Image, group: "inline"},
