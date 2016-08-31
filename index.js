@@ -4,25 +4,25 @@ exports.Text = Text
 // !! This module defines a number of basic node and mark types, and a
 // schema that combines them.
 
-// ;; A default top-level document node type.
+// ::- A default top-level document node type.
 class Doc extends Block {}
 exports.Doc = Doc
 
-// ;; A blockquote node type.
+// ::- A blockquote node type.
 class BlockQuote extends Block {
   get matchDOMTag() { return {"blockquote": null} }
   toDOM() { return ["blockquote", 0] }
 }
 exports.BlockQuote = BlockQuote
 
-// ;; A node type for horizontal rules.
+// ::- A node type for horizontal rules.
 class HorizontalRule extends Block {
   get matchDOMTag() { return {"hr": null} }
   toDOM() { return ["div", ["hr"]] }
 }
 exports.HorizontalRule = HorizontalRule
 
-// ;; A heading node type. Has a single attribute `level`, which
+// ::- A heading node type. Has a single attribute `level`, which
 // indicates the heading level, and defaults to 1.
 class Heading extends Block {
   get attrs() { return {level: new Attribute({default: 1})} }
@@ -44,7 +44,7 @@ class Heading extends Block {
 }
 exports.Heading = Heading
 
-// ;; A code block / listing node type.
+// ::- A code block / listing node type.
 class CodeBlock extends Block {
   get isCode() { return true }
   get matchDOMTag() { return {"pre": [null, {preserveWhitespace: true}]} }
@@ -52,14 +52,14 @@ class CodeBlock extends Block {
 }
 exports.CodeBlock = CodeBlock
 
-// ;; A paragraph node type.
+// ::- A paragraph node type.
 class Paragraph extends Block {
   get matchDOMTag() { return {"p": null} }
   toDOM() { return ["p", 0] }
 }
 exports.Paragraph = Paragraph
 
-// ;; An inline image node type. Has these attributes:
+// ::- An inline image node type. Has these attributes:
 //
 // - **`src`** (required): The URL of the image.
 // - **`alt`**: The alt text.
@@ -84,7 +84,7 @@ class Image extends Inline {
 }
 exports.Image = Image
 
-// ;; A hard break node type.
+// ::- A hard break node type.
 class HardBreak extends Inline {
   get selectable() { return false }
   get isBR() { return true }
@@ -93,7 +93,7 @@ class HardBreak extends Inline {
 }
 exports.HardBreak = HardBreak
 
-// ;; An emphasis mark type.
+// ::- An emphasis mark type.
 class EmMark extends MarkType {
   get matchDOMTag() { return {"i": null, "em": null} }
   get matchDOMStyle() {
@@ -103,7 +103,7 @@ class EmMark extends MarkType {
 }
 exports.EmMark = EmMark
 
-// ;; A strong mark type.
+// ::- A strong mark type.
 class StrongMark extends MarkType {
   get matchDOMTag() { return {"b": null, "strong": null} }
   get matchDOMStyle() {
@@ -113,7 +113,7 @@ class StrongMark extends MarkType {
 }
 exports.StrongMark = StrongMark
 
-// ;; A link mark type. Has these attributes:
+// ::- A link mark type. Has these attributes:
 //
 // - **`href`** (required): The link target.
 // - **`title`**: The link's title.
@@ -133,7 +133,7 @@ class LinkMark extends MarkType {
 }
 exports.LinkMark = LinkMark
 
-// ;; A code font mark type.
+// ::- A code font mark type.
 class CodeMark extends MarkType {
   get isCode() { return true }
   get matchDOMTag() { return {"code": null} }
