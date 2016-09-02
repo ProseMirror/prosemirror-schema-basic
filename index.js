@@ -1,9 +1,6 @@
 const {Schema, Block, Inline, Text, Attribute, MarkType} = require("../model")
 exports.Text = Text
 
-// !! This module defines a number of basic node and mark types, and a
-// schema that combines them.
-
 // ::- A default top-level document node type.
 class Doc extends Block {}
 exports.Doc = Doc
