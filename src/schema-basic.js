@@ -1,4 +1,4 @@
-const {Schema, Block, Inline, Text, Attribute, MarkType} = require("../model")
+const {Schema, Block, Inline, Text, Attribute, MarkType} = require("prosemirror-model")
 exports.Text = Text
 
 // ::- A default top-level document node type.

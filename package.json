@@ -1,0 +1,29 @@
+{
+  "name": "prosemirror-schema-basic",
+  "version": "0.11.0",
+  "description": "Basic schema elements for ProseMirror",
+  "main": "src/schema-basic.js",
+  "license": "MIT",
+  "maintainers": [
+    {
+      "name": "Marijn Haverbeke",
+      "email": "marijnh@gmail.com",
+      "web": "http://marijnhaverbeke.nl"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/prosemirror/prosemirror-schema-basic.git"
+  },
+  "dependencies": {
+    "prosemirror-model": "^0.11.0"
+  },
+  "devDependencies": {
+    "ist": "^1.0.0",
+    "mocha": "^3.0.2",
+    "rimraf": "^2.5.4"
+  },
+  "scripts": {
+    "x-prepublish": "rimraf dist && babel -d dist src"
+  }
+}
