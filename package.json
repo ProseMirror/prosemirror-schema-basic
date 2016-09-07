@@ -19,11 +19,10 @@
     "prosemirror-model": "^0.11.0"
   },
   "devDependencies": {
-    "ist": "^1.0.0",
-    "mocha": "^3.0.2",
     "rimraf": "^2.5.4"
   },
   "scripts": {
+    "test": "true",
     "x-prepublish": "rimraf dist && babel -d dist src"
   }
 }
