@@ -23,10 +23,6 @@ exports.HorizontalRule = HorizontalRule
 // indicates the heading level, and defaults to 1.
 class Heading extends Block {
   get attrs() { return {level: new Attribute({default: 1})} }
-  // :: number
-  // Controls the maximum heading level. Has the value 6 in the
-  // `Heading` class, but you can override it in a subclass.
-  get maxLevel() { return 6 }
   get matchDOMTag() {
     return {
       "h1": {level: 1},
