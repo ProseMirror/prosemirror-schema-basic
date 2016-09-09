@@ -1,8 +1,6 @@
-const {Schema, Block, Inline, Text, Attribute, MarkType} = require("prosemirror-model")
-exports.Text = Text
+const {Schema, Doc, Block, Inline, Text, Attribute, MarkType} = require("prosemirror-model")
 
-// ::- A default top-level document node type.
-class Doc extends Block {}
+exports.Text = Text
 exports.Doc = Doc
 
 // ::- A blockquote node type.
