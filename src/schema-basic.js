@@ -30,20 +30,20 @@ const nodes = {
   paragraph: {
     content: "inline<_>*",
     group: "block",
-    matchDOMTag: {"p": null},
+    parseDOM: [{tag: "p"}],
     toDOM() { return ["p", 0] }
   },
 
   blockquote: {
     content: "block+",
     group: "block",
-    matchDOMTag: {"blockquote": null},
+    parseDOM: [{tag: "blockquote"}],
     toDOM() { return ["blockquote", 0] }
   },
 
   horizontal_rule: {
     group: "block",
-    matchDOMTag: {"hr": null},
+    parseDOM: [{tag: "hr"}],
     toDOM() { return ["div", ["hr"]] }
   },
 
@@ -51,10 +51,12 @@ const nodes = {
     attrs: {level: {default: 1}},
     content: "inline<_>*",
     group: "block",
-    matchDOMTag: {
-      "h1": {level: 1}, "h2": {level: 2}, "h3": {level: 3},
-      "h4": {level: 4}, "h5": {level: 5}, "h6": {level: 6}
-    },
+    parseDOM: [{tag: "h1", attrs: {level: 1}},
+               {tag: "h2", attrs: {level: 2}},
+               {tag: "h3", attrs: {level: 3}},
+               {tag: "h4", attrs: {level: 4}},
+               {tag: "h5", attrs: {level: 5}},
+               {tag: "h6", attrs: {level: 6}}],
     toDOM(node) { return ["h" + node.attrs.level, 0] }
   },
 
@@ -62,14 +64,13 @@ const nodes = {
     content: "text*",
     group: "block",
     code: true,
-    matchDOMTag: {"pre": [null, {preserveWhitespace: true}]},
+    parseDOM: [{tag: "pre", preserveWhitespace: true}],
     toDOM() { return ["pre", ["code", 0]] }
   },
 
   text: {
     text: true,
     group: "inline",
-    selectable: false,
     toDOM(node) { return node.text }
   },
 
@@ -82,11 +83,13 @@ const nodes = {
     },
     group: "inline",
     draggable: true,
-    matchDOMTag: {"img[src]": dom => ({
-      src: dom.getAttribute("src"),
-      title: dom.getAttribute("title"),
-      alt: dom.getAttribute("alt")
-    })},
+    parseDOM: [{tag: "img[src]", getAttrs(dom) {
+      return {
+        src: dom.getAttribute("src"),
+        title: dom.getAttribute("title"),
+        alt: dom.getAttribute("alt")
+      }
+    }}],
     toDOM(node) { return ["img", node.attrs] }
   },
 
@@ -95,7 +98,7 @@ const nodes = {
     group: "inline",
     selectable: false,
     isBR: true,
-    matchDOMTag: {"br": null},
+    parseDOM: [{tag: "br"}],
     toDOM() { return ["br"] }
   }
 }
@@ -113,14 +116,14 @@ exports.nodes = nodes
 //  code:: MarkSpec Code font mark.
 const marks = {
   em: {
-    matchDOMTag: {"i": null, "em": null},
-    matchDOMStyle: {"font-style": value => value == "italic" && null},
+    parseDOM: [{tag: "i"}, {tag: "em"},
+               {style: "font-style", getAttrs: value => value == "italic" && null}],
     toDOM() { return ["em"] }
   },
 
   strong: {
-    matchDOMTag: {"b": null, "strong": null},
-    matchDOMStyle: {"font-weight": value => /^(bold(er)?|[5-9]\d{2,})$/.test(value) && null},
+    parseDOM: [{tag: "b"}, {tag: "strong"},
+               {style: "font-weight", getAttrs: value => /^(bold(er)?|[5-9]\d{2,})$/.test(value) && null}],
     toDOM() { return ["strong"] }
   },
 
@@ -129,14 +132,14 @@ const marks = {
       href: {},
       title: {default: ""}
     },
-    matchDOMTag: {"a[href]": dom => ({
-      href: dom.getAttribute("href"), title: dom.getAttribute("title")
-    })},
+    parseDOM: [{tag: "a[href]", getAttrs(dom) {
+      return {href: dom.getAttribute("href"), title: dom.getAttribute("title")}
+    }}],
     toDOM(node) { return ["a", node.attrs] }
   },
 
   code: {
-    matchDOMTag: {"code": null},
+    parseDOM: [{tag: "code"}],
     toDOM() { return ["code"] }
   }
 }
