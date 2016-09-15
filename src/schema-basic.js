@@ -1,159 +1,153 @@
-const {Schema, Doc, Block, Inline, Text, Attribute, MarkType} = require("prosemirror-model")
-
-exports.Text = Text
-exports.Doc = Doc
-
-// ::- A blockquote node type.
-class BlockQuote extends Block {
-  get matchDOMTag() { return {"blockquote": null} }
-  toDOM() { return ["blockquote", 0] }
-}
-exports.BlockQuote = BlockQuote
-
-// ::- A node type for horizontal rules.
-class HorizontalRule extends Block {
-  get matchDOMTag() { return {"hr": null} }
-  toDOM() { return ["div", ["hr"]] }
-}
-exports.HorizontalRule = HorizontalRule
-
-// ::- A heading node type. Has a single attribute `level`, which
-// indicates the heading level, and defaults to 1.
-class Heading extends Block {
-  get attrs() { return {level: new Attribute({default: 1})} }
-  get matchDOMTag() {
-    return {
-      "h1": {level: 1},
-      "h2": {level: 2},
-      "h3": {level: 3},
-      "h4": {level: 4},
-      "h5": {level: 5},
-      "h6": {level: 6}
-    }
-  }
-  toDOM(node) { return ["h" + node.attrs.level, 0] }
-}
-exports.Heading = Heading
-
-// ::- A code block / listing node type.
-class CodeBlock extends Block {
-  get isCode() { return true }
-  get matchDOMTag() { return {"pre": [null, {preserveWhitespace: true}]} }
-  toDOM() { return ["pre", ["code", 0]] }
-}
-exports.CodeBlock = CodeBlock
-
-// ::- A paragraph node type.
-class Paragraph extends Block {
-  get matchDOMTag() { return {"p": null} }
-  toDOM() { return ["p", 0] }
-}
-exports.Paragraph = Paragraph
-
-// ::- An inline image node type. Has these attributes:
-//
-// - **`src`** (required): The URL of the image.
-// - **`alt`**: The alt text.
-// - **`title`**: The title of the image.
-class Image extends Inline {
-  get attrs() {
-    return {
-      src: new Attribute,
-      alt: new Attribute({default: ""}),
-      title: new Attribute({default: ""})
-    }
-  }
-  get draggable() { return true }
-  get matchDOMTag() {
-    return {"img[src]": dom => ({
-      src: dom.getAttribute("src"),
-      title: dom.getAttribute("title"),
-      alt: dom.getAttribute("alt")
-    })}
-  }
-  toDOM(node) { return ["img", node.attrs] }
-}
-exports.Image = Image
-
-// ::- A hard break node type.
-class HardBreak extends Inline {
-  get selectable() { return false }
-  get isBR() { return true }
-  get matchDOMTag() { return {"br": null} }
-  toDOM() { return ["br"] }
-}
-exports.HardBreak = HardBreak
-
-// ::- An emphasis mark type.
-class EmMark extends MarkType {
-  get matchDOMTag() { return {"i": null, "em": null} }
-  get matchDOMStyle() {
-    return {"font-style": value => value == "italic" && null}
-  }
-  toDOM() { return ["em"] }
-}
-exports.EmMark = EmMark
-
-// ::- A strong mark type.
-class StrongMark extends MarkType {
-  get matchDOMTag() { return {"b": null, "strong": null} }
-  get matchDOMStyle() {
-    return {"font-weight": value => /^(bold(er)?|[5-9]\d{2,})$/.test(value) && null}
-  }
-  toDOM() { return ["strong"] }
-}
-exports.StrongMark = StrongMark
-
-// ::- A link mark type. Has these attributes:
-//
-// - **`href`** (required): The link target.
-// - **`title`**: The link's title.
-class LinkMark extends MarkType {
-  get attrs() {
-    return {
-      href: new Attribute,
-      title: new Attribute({default: ""})
-    }
-  }
-  get matchDOMTag() {
-    return {"a[href]": dom => ({
-      href: dom.getAttribute("href"), title: dom.getAttribute("title")
-    })}
-  }
-  toDOM(node) { return ["a", node.attrs] }
-}
-exports.LinkMark = LinkMark
-
-// ::- A code font mark type.
-class CodeMark extends MarkType {
-  get isCode() { return true }
-  get matchDOMTag() { return {"code": null} }
-  toDOM() { return ["code"] }
-}
-exports.CodeMark = CodeMark
+const {Schema} = require("prosemirror-model")
 
 // :: Schema
-// A basic document schema.
-const schema = new Schema({
+// This schema rougly corresponds to the document schema used by
+// CommonMark, minus the list elements, which are defined in the
+// [schema-list](#schema-list) module.
+//
+// To reuse elements from this schema, extend or read from its
+// [`nodeSpec`](#model.Schema.nodeSpec) and
+// [`markSpec`](#model.Schema.markSpec) properties.
+//
+//   nodeSpec:: OrderedMap
+//
+//     doc:: NodeSpec The top level document node.
+//
+//     paragraph:: NodeSpec A plain paragraph textblock.
+//
+//     blockquote:: NodeSpec A blockquote wrapping one or more blocks.
+//
+//     horizontal_rule:: NodeSpec A horizontal rule.
+//
+//     heading:: NodeSpec A heading textblock, with a `level`
+//     attribute that should hold the number 1 to 6.
+//
+//     code_block:: NodeSpec A code listing. Disallows marks or
+//     non-text inline nodes by default.
+//
+//     text:: NodeSpec The text node.
+//
+//     image:: An inline image node. Supports `src`, `alt`, and `href`
+//     attributes. The latter two default to the empty string.
+//
+//     hard_break:: A hard line break.
+//
+//  markSpec:: OrderedMap
+//
+//    em:: MarkSpec An emphasis mark.
+//
+//    strong:: MarkSpec A strong mark.
+//
+//    link:: MarkSpec A link. Has `href` and `title` attributes.
+//    `title` defaults to the empty string.
+//
+//    code:: MarkSpec Code font mark.
+exports.schema = new Schema({
   nodes: {
-    doc: {type: Doc, content: "block+"},
+    doc: {
+      content: "block+"
+    },
 
-    paragraph: {type: Paragraph, content: "inline<_>*", group: "block"},
-    blockquote: {type: BlockQuote, content: "block+", group: "block"},
-    horizontal_rule: {type: HorizontalRule, group: "block"},
-    heading: {type: Heading, content: "inline<_>*", group: "block"},
-    code_block: {type: CodeBlock, content: "text*", group: "block"},
+    paragraph: {
+      content: "inline<_>*",
+      group: "block",
+      matchDOMTag: {"p": null},
+      toDOM() { return ["p", 0] }
+    },
 
-    text: {type: Text, group: "inline"},
-    image: {type: Image, group: "inline"},
-    hard_break: {type: HardBreak, group: "inline"}
+    blockquote: {
+      content: "block+",
+      group: "block",
+      matchDOMTag: {"blockquote": null},
+      toDOM() { return ["blockquote", 0] }
+    },
+
+    horizontal_rule: {
+      group: "block",
+      matchDOMTag: {"hr": null},
+      toDOM() { return ["div", ["hr"]] }
+    },
+
+    heading: {
+      attrs: {level: {default: 1}},
+      content: "inline<_>*",
+      group: "block",
+      matchDOMTag: {
+        "h1": {level: 1}, "h2": {level: 2}, "h3": {level: 3},
+        "h4": {level: 4}, "h5": {level: 5}, "h6": {level: 6}
+      },
+      toDOM(node) { return ["h" + node.attrs.level, 0] }
+    },
+
+    code_block: {
+      content: "text*",
+      group: "block",
+      code: true,
+      matchDOMTag: {"pre": [null, {preserveWhitespace: true}]},
+      toDOM() { return ["pre", ["code", 0]] }
+    },
+
+    text: {
+      text: true,
+      group: "inline",
+      selectable: false,
+      toDOM(node) { return node.text }
+    },
+
+    image: {
+      inline: true,
+      attrs: {
+        src: {},
+        alt: {default: ""},
+        title: {default: ""}
+      },
+      group: "inline",
+      draggable: true,
+      matchDOMTag: {"img[src]": dom => ({
+        src: dom.getAttribute("src"),
+        title: dom.getAttribute("title"),
+        alt: dom.getAttribute("alt")
+      })},
+      toDOM(node) { return ["img", node.attrs] }
+    },
+
+    hard_break: {
+      inline: true,
+      group: "inline",
+      selectable: false,
+      isBR: true,
+      matchDOMTag: {"br": null},
+      toDOM() { return ["br"] }
+    }
   },
 
   marks: {
-    em: EmMark,
-    strong: StrongMark,
-    link: LinkMark,
-    code: CodeMark
+    em: {
+      matchDOMTag: {"i": null, "em": null},
+      matchDOMStyle: {"font-style": value => value == "italic" && null},
+      toDOM() { return ["em"] }
+    },
+
+    strong: {
+      matchDOMTag: {"b": null, "strong": null},
+      matchDOMStyle: {"font-weight": value => /^(bold(er)?|[5-9]\d{2,})$/.test(value) && null},
+      toDOM() { return ["strong"] }
+    },
+
+    link: {
+      attrs: {
+        href: {},
+        title: {default: ""}
+      },
+      matchDOMTag: {"a[href]": dom => ({
+        href: dom.getAttribute("href"), title: dom.getAttribute("title")
+      })},
+      toDOM(node) { return ["a", node.attrs] }
+    },
+
+    code: {
+      matchDOMTag: {"code": null},
+      toDOM() { return ["code"] }
+    }
   }
 })
-exports.schema = schema
