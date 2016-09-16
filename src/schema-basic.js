@@ -69,7 +69,6 @@ const nodes = {
   },
 
   text: {
-    text: true,
     group: "inline",
     toDOM(node) { return node.text }
   },
