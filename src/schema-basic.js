@@ -97,7 +97,6 @@ const nodes = {
     inline: true,
     group: "inline",
     selectable: false,
-    isBR: true,
     parseDOM: [{tag: "br"}],
     toDOM() { return ["br"] }
   }
