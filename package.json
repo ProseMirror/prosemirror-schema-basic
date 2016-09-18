@@ -2,7 +2,7 @@
   "name": "prosemirror-schema-basic",
   "version": "0.11.0",
   "description": "Basic schema elements for ProseMirror",
-  "main": "src/schema-basic.js",
+  "main": "dist/schema-basic.js",
   "license": "MIT",
   "maintainers": [
     {
@@ -19,10 +19,13 @@
     "prosemirror-model": "^0.11.0"
   },
   "devDependencies": {
+    "buble": "~0.14.0",
     "rimraf": "^2.5.4"
   },
   "scripts": {
     "test": "true",
-    "x-prepublish": "rimraf dist && babel -d dist src"
+    "build": "rimraf dist && buble -i src -o dist",
+    "link-src": "rimraf dist && ln -s src dist",
+    "prepublish": "npm run build"
   }
 }
