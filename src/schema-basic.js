@@ -77,8 +77,8 @@ const nodes = {
     inline: true,
     attrs: {
       src: {},
-      alt: {default: ""},
-      title: {default: ""}
+      alt: {default: null},
+      title: {default: null}
     },
     group: "inline",
     draggable: true,
@@ -132,7 +132,7 @@ const marks = {
   link: {
     attrs: {
       href: {},
-      title: {default: ""}
+      title: {default: null}
     },
     parseDOM: [{tag: "a[href]", getAttrs(dom) {
       return {href: dom.getAttribute("href"), title: dom.getAttribute("title")}
