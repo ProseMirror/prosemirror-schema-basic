@@ -37,6 +37,7 @@ const nodes = {
   blockquote: {
     content: "block+",
     group: "block",
+    defining: true,
     parseDOM: [{tag: "blockquote"}],
     toDOM() { return ["blockquote", 0] }
   },
@@ -51,6 +52,7 @@ const nodes = {
     attrs: {level: {default: 1}},
     content: "inline<_>*",
     group: "block",
+    defining: true,
     parseDOM: [{tag: "h1", attrs: {level: 1}},
                {tag: "h2", attrs: {level: 2}},
                {tag: "h3", attrs: {level: 3}},
@@ -64,6 +66,7 @@ const nodes = {
     content: "text*",
     group: "block",
     code: true,
+    defining: true,
     parseDOM: [{tag: "pre", preserveWhitespace: true}],
     toDOM() { return ["pre", ["code", 0]] }
   },
