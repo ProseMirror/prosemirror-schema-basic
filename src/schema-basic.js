@@ -45,7 +45,7 @@ const nodes = {
   horizontal_rule: {
     group: "block",
     parseDOM: [{tag: "hr"}],
-    toDOM() { return ["div", ["hr"]] }
+    toDOM() { return ["hr"] }
   },
 
   heading: {
