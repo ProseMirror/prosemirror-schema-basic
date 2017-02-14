@@ -156,7 +156,6 @@ exports.marks = marks
 // [schema-list](#schema-list) module.
 //
 // To reuse elements from this schema, extend or read from its
-// [`nodeSpec`](#model.Schema.nodeSpec) and
-// [`markSpec`](#model.Schema.markSpec) properties.
+// `spec.nodes` and `spec.marks` [properties](#model.Schema.spec).
 const schema = new Schema({nodes, marks})
 exports.schema = schema
