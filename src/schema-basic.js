@@ -72,8 +72,7 @@ const nodes = {
   },
 
   text: {
-    group: "inline",
-    toDOM(node) { return node.text }
+    group: "inline"
   },
 
   image: {
