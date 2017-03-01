@@ -106,15 +106,26 @@ exports.nodes = nodes
 
 // :: Object
 //
+//  link:: MarkSpec A link. Has `href` and `title` attributes.
+//  `title` defaults to the empty string.
+//
 //  em:: MarkSpec An emphasis mark.
 //
 //  strong:: MarkSpec A strong mark.
 //
-//  link:: MarkSpec A link. Has `href` and `title` attributes.
-//  `title` defaults to the empty string.
-//
 //  code:: MarkSpec Code font mark.
 const marks = {
+  link: {
+    attrs: {
+      href: {},
+      title: {default: null}
+    },
+    parseDOM: [{tag: "a[href]", getAttrs(dom) {
+      return {href: dom.getAttribute("href"), title: dom.getAttribute("title")}
+    }}],
+    toDOM(node) { return ["a", node.attrs] }
+  },
+
   em: {
     parseDOM: [{tag: "i"}, {tag: "em"},
                {style: "font-style", getAttrs: value => value == "italic" && null}],
@@ -129,17 +140,6 @@ const marks = {
                {tag: "b", getAttrs: node => node.style.fontWeight != "normal" && null},
                {style: "font-weight", getAttrs: value => /^(bold(er)?|[5-9]\d{2,})$/.test(value) && null}],
     toDOM() { return ["strong"] }
-  },
-
-  link: {
-    attrs: {
-      href: {},
-      title: {default: null}
-    },
-    parseDOM: [{tag: "a[href]", getAttrs(dom) {
-      return {href: dom.getAttribute("href"), title: dom.getAttribute("title")}
-    }}],
-    toDOM(node) { return ["a", node.attrs] }
   },
 
   code: {
