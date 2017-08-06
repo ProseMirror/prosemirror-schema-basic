@@ -1,4 +1,4 @@
-const {Schema} = require("prosemirror-model")
+import {Schema} from "prosemirror-model"
 
 // :: Object
 //
@@ -22,7 +22,7 @@ const {Schema} = require("prosemirror-model")
 //   `href` attributes. The latter two default to the empty string.
 //
 //   hard_break:: NodeSpec A hard line break.
-const nodes = {
+export const nodes = {
   doc: {
     content: "block+"
   },
@@ -102,7 +102,6 @@ const nodes = {
     toDOM() { return ["br"] }
   }
 }
-exports.nodes = nodes
 
 // :: Object
 //
@@ -114,7 +113,7 @@ exports.nodes = nodes
 //  strong:: MarkSpec A strong mark.
 //
 //  code:: MarkSpec Code font mark.
-const marks = {
+export const marks = {
   link: {
     attrs: {
       href: {},
@@ -148,7 +147,6 @@ const marks = {
     toDOM() { return ["code"] }
   }
 }
-exports.marks = marks
 
 // :: Schema
 // This schema rougly corresponds to the document schema used by
@@ -157,5 +155,4 @@ exports.marks = marks
 //
 // To reuse elements from this schema, extend or read from its
 // `spec.nodes` and `spec.marks` [properties](#model.Schema.spec).
-const schema = new Schema({nodes, marks})
-exports.schema = schema
+export const schema = new Schema({nodes, marks})
