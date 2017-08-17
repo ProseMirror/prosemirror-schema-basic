@@ -28,7 +28,7 @@ export const nodes = {
   },
 
   paragraph: {
-    content: "inline<_>*",
+    content: "inline*",
     group: "block",
     parseDOM: [{tag: "p"}],
     toDOM() { return ["p", 0] }
@@ -50,7 +50,7 @@ export const nodes = {
 
   heading: {
     attrs: {level: {default: 1}},
-    content: "inline<_>*",
+    content: "inline*",
     group: "block",
     defining: true,
     parseDOM: [{tag: "h1", attrs: {level: 1}},
@@ -64,6 +64,7 @@ export const nodes = {
 
   code_block: {
     content: "text*",
+    marks: "",
     group: "block",
     code: true,
     defining: true,
