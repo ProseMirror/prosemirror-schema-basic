@@ -128,8 +128,7 @@ export const marks = {
   },
 
   em: {
-    parseDOM: [{tag: "i"}, {tag: "em"},
-               {style: "font-style", getAttrs: value => value == "italic" && null}],
+    parseDOM: [{tag: "i"}, {tag: "em"}, {style: "font-style=italic"}],
     toDOM() { return ["em"] }
   },
 
