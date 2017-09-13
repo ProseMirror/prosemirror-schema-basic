@@ -64,7 +64,9 @@ export const nodes = {
   },
 
   // :: NodeSpec The text node.
-  text: {},
+  text: {
+    group: "inline"
+  },
 
   // :: NodeSpec An inline image (`<img>`) node. Supports `src`,
   // `alt`, and `href` attributes. The latter two default to the empty
