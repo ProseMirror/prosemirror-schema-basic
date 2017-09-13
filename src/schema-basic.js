@@ -1,32 +1,15 @@
 import {Schema} from "prosemirror-model"
 
 // :: Object
-//
-//   doc:: NodeSpec The top level document node.
-//
-//   paragraph:: NodeSpec A plain paragraph textblock.
-//
-//   blockquote:: NodeSpec A blockquote wrapping one or more blocks.
-//
-//   horizontal_rule:: NodeSpec A horizontal rule.
-//
-//   heading:: NodeSpec A heading textblock, with a `level`
-//   attribute that should hold the number 1 to 6.
-//
-//   code_block:: NodeSpec A code listing. Disallows marks or
-//   non-text inline nodes by default.
-//
-//   text:: NodeSpec The text node.
-//
-//   image:: NodeSpec An inline image node. Supports `src`, `alt`, and
-//   `href` attributes. The latter two default to the empty string.
-//
-//   hard_break:: NodeSpec A hard line break.
+// [Specs](#model.NodeSpec) for the nodes defined in this schema.
 export const nodes = {
+  // :: NodeSpec The top level document node.
   doc: {
     content: "block+"
   },
 
+  // :: NodeSpec A plain paragraph textblock. Represented in the DOM
+  // as a `<p>` element.
   paragraph: {
     content: "inline*",
     group: "block",
@@ -34,6 +17,7 @@ export const nodes = {
     toDOM() { return ["p", 0] }
   },
 
+  // :: NodeSpec A blockquote (`<blockquote>`) wrapping one or more blocks.
   blockquote: {
     content: "block+",
     group: "block",
@@ -42,12 +26,16 @@ export const nodes = {
     toDOM() { return ["blockquote", 0] }
   },
 
+  // :: NodeSpec A horizontal rule (`<hr>`).
   horizontal_rule: {
     group: "block",
     parseDOM: [{tag: "hr"}],
     toDOM() { return ["hr"] }
   },
 
+  // :: NodeSpec A heading textblock, with a `level` attribute that
+  // should hold the number 1 to 6. Parsed and serialized as `<h1>` to
+  // `<h6>` elements.
   heading: {
     attrs: {level: {default: 1}},
     content: "inline*",
@@ -62,6 +50,9 @@ export const nodes = {
     toDOM(node) { return ["h" + node.attrs.level, 0] }
   },
 
+  // :: NodeSpec A code listing. Disallows marks or non-text inline
+  // nodes by default. Represented as a `<pre>` element with a
+  // `<code>` element inside of it.
   code_block: {
     content: "text*",
     marks: "",
@@ -72,10 +63,12 @@ export const nodes = {
     toDOM() { return ["pre", ["code", 0]] }
   },
 
-  text: {
-    group: "inline"
-  },
+  // :: NodeSpec The text node.
+  text: {},
 
+  // :: NodeSpec An inline image (`<img>`) node. Supports `src`,
+  // `alt`, and `href` attributes. The latter two default to the empty
+  // string.
   image: {
     inline: true,
     attrs: {
@@ -95,6 +88,7 @@ export const nodes = {
     toDOM(node) { return ["img", node.attrs] }
   },
 
+  // :: NodeSpec A hard line break, represented in the DOM as `<br>`.
   hard_break: {
     inline: true,
     group: "inline",
@@ -104,17 +98,11 @@ export const nodes = {
   }
 }
 
-// :: Object
-//
-//  link:: MarkSpec A link. Has `href` and `title` attributes.
-//  `title` defaults to the empty string.
-//
-//  em:: MarkSpec An emphasis mark.
-//
-//  strong:: MarkSpec A strong mark.
-//
-//  code:: MarkSpec Code font mark.
+// :: Object [Specs](#model.MarkSpec) for the marks in the schema.
 export const marks = {
+  // :: MarkSpec A link. Has `href` and `title` attributes. `title`
+  // defaults to the empty string. Rendered and parsed as an `<a>`
+  // element.
   link: {
     attrs: {
       href: {},
@@ -127,11 +115,15 @@ export const marks = {
     toDOM(node) { return ["a", node.attrs] }
   },
 
+  // :: MarkSpec An emphasis mark. Rendered as an `<em>` element.
+  // Has parse rules that also match `<i>` and `font-style: italic`.
   em: {
     parseDOM: [{tag: "i"}, {tag: "em"}, {style: "font-style=italic"}],
     toDOM() { return ["em"] }
   },
 
+  // :: MarkSpec A strong mark. Rendered as `<strong>`, parse rules
+  // also match `<b>` and `font-weight: bold`.
   strong: {
     parseDOM: [{tag: "strong"},
                // This works around a Google Docs misbehavior where
@@ -142,6 +134,7 @@ export const marks = {
     toDOM() { return ["strong"] }
   },
 
+  // :: MarkSpec Code font mark. Represented as a `<code>` element.
   code: {
     parseDOM: [{tag: "code"}],
     toDOM() { return ["code"] }
@@ -150,8 +143,9 @@ export const marks = {
 
 // :: Schema
 // This schema rougly corresponds to the document schema used by
-// CommonMark, minus the list elements, which are defined in the
-// [schema-list](#schema-list) module.
+// [CommonMark](http://commonmark.org/), minus the list elements,
+// which are defined in the [`prosemirror-schema-list`](#schema-list)
+// module.
 //
 // To reuse elements from this schema, extend or read from its
 // `spec.nodes` and `spec.marks` [properties](#model.Schema.spec).

@@ -1,5 +1,5 @@
-This module defines a simple schema, to use directly, extend, or to
-reuse pieces in a schema you assemble.
+This module defines a simple schema. You can use it directly, extend
+it, or just pick out a few node and mark specs to use in a new schema.
 
 @schema
 
