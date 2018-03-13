@@ -114,14 +114,14 @@ export const marks = {
     parseDOM: [{tag: "a[href]", getAttrs(dom) {
       return {href: dom.getAttribute("href"), title: dom.getAttribute("title")}
     }}],
-    toDOM(node) { return ["a", node.attrs] }
+    toDOM(node) { return ["a", node.attrs, 0] }
   },
 
   // :: MarkSpec An emphasis mark. Rendered as an `<em>` element.
   // Has parse rules that also match `<i>` and `font-style: italic`.
   em: {
     parseDOM: [{tag: "i"}, {tag: "em"}, {style: "font-style=italic"}],
-    toDOM() { return ["em"] }
+    toDOM() { return ["em", 0] }
   },
 
   // :: MarkSpec A strong mark. Rendered as `<strong>`, parse rules
@@ -133,13 +133,13 @@ export const marks = {
                // tags with a font-weight normal.
                {tag: "b", getAttrs: node => node.style.fontWeight != "normal" && null},
                {style: "font-weight", getAttrs: value => /^(bold(er)?|[5-9]\d{2,})$/.test(value) && null}],
-    toDOM() { return ["strong"] }
+    toDOM() { return ["strong", 0] }
   },
 
   // :: MarkSpec Code font mark. Represented as a `<code>` element.
   code: {
     parseDOM: [{tag: "code"}],
-    toDOM() { return ["code"] }
+    toDOM() { return ["code", 0] }
   }
 }
 
