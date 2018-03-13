@@ -1,5 +1,8 @@
 import {Schema} from "prosemirror-model"
 
+const pDOM = ["p", 0], blockquoteDOM = ["blockquote", 0], hrDOM = ["hr"],
+      preDOM = ["pre", ["code", 0]], brDOM = ["br"]
+
 // :: Object
 // [Specs](#model.NodeSpec) for the nodes defined in this schema.
 export const nodes = {
@@ -14,7 +17,7 @@ export const nodes = {
     content: "inline*",
     group: "block",
     parseDOM: [{tag: "p"}],
-    toDOM() { return ["p", 0] }
+    toDOM() { return pDOM }
   },
 
   // :: NodeSpec A blockquote (`<blockquote>`) wrapping one or more blocks.
@@ -23,14 +26,14 @@ export const nodes = {
     group: "block",
     defining: true,
     parseDOM: [{tag: "blockquote"}],
-    toDOM() { return ["blockquote", 0] }
+    toDOM() { return blockquoteDOM }
   },
 
   // :: NodeSpec A horizontal rule (`<hr>`).
   horizontal_rule: {
     group: "block",
     parseDOM: [{tag: "hr"}],
-    toDOM() { return ["hr"] }
+    toDOM() { return hrDOM }
   },
 
   // :: NodeSpec A heading textblock, with a `level` attribute that
@@ -60,7 +63,7 @@ export const nodes = {
     code: true,
     defining: true,
     parseDOM: [{tag: "pre", preserveWhitespace: "full"}],
-    toDOM() { return ["pre", ["code", 0]] }
+    toDOM() { return preDOM }
   },
 
   // :: NodeSpec The text node.
@@ -96,9 +99,11 @@ export const nodes = {
     group: "inline",
     selectable: false,
     parseDOM: [{tag: "br"}],
-    toDOM() { return ["br"] }
+    toDOM() { return brDOM }
   }
 }
+
+const emDOM = ["em", 0], strongDOM = ["strong", 0], codeDOM = ["code", 0]
 
 // :: Object [Specs](#model.MarkSpec) for the marks in the schema.
 export const marks = {
@@ -121,7 +126,7 @@ export const marks = {
   // Has parse rules that also match `<i>` and `font-style: italic`.
   em: {
     parseDOM: [{tag: "i"}, {tag: "em"}, {style: "font-style=italic"}],
-    toDOM() { return ["em", 0] }
+    toDOM() { return emDOM }
   },
 
   // :: MarkSpec A strong mark. Rendered as `<strong>`, parse rules
@@ -133,13 +138,13 @@ export const marks = {
                // tags with a font-weight normal.
                {tag: "b", getAttrs: node => node.style.fontWeight != "normal" && null},
                {style: "font-weight", getAttrs: value => /^(bold(er)?|[5-9]\d{2,})$/.test(value) && null}],
-    toDOM() { return ["strong", 0] }
+    toDOM() { return strongDOM }
   },
 
   // :: MarkSpec Code font mark. Represented as a `<code>` element.
   code: {
     parseDOM: [{tag: "code"}],
-    toDOM() { return ["code", 0] }
+    toDOM() { return codeDOM }
   }
 }
 
