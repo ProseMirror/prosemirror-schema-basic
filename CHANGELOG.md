@@ -1,3 +1,9 @@
+## 1.0.1 (2019-04-18)
+
+### Bug fixes
+
+Make sure images and links don't render whatever happens to be in `node.attrs` to the DOM.
+
 ## 0.19.0 (2017-03-16)
 
 ### Breaking changes
