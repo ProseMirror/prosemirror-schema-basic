@@ -149,7 +149,7 @@ export const marks = {
 }
 
 // :: Schema
-// This schema rougly corresponds to the document schema used by
+// This schema roughly corresponds to the document schema used by
 // [CommonMark](http://commonmark.org/), minus the list elements,
 // which are defined in the [`prosemirror-schema-list`](#schema-list)
 // module.
