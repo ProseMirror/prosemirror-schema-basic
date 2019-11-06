@@ -1,7 +1,12 @@
-module.exports = {
-  input: "./src/schema-basic.js",
-  output: {format: "cjs", file: "dist/schema-basic.js"},
-  sourcemap: true,
-  plugins: [require("rollup-plugin-buble")()],
+import buble from '@rollup/plugin-buble'
+
+export default {
+  input: './src/schema-basic.js',
+  output: {
+    dir: 'dist',
+    format: 'cjs',
+    sourcemap: true
+  },
+  plugins: [buble()],
   external(id) { return !/^[\.\/]/.test(id) }
 }
