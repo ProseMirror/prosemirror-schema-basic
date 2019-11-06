@@ -3,6 +3,7 @@
   "version": "1.0.1",
   "description": "Basic schema elements for ProseMirror",
   "main": "dist/schema-basic.js",
+  "module": "src/schema-basic.js",
   "license": "MIT",
   "maintainers": [
     {
