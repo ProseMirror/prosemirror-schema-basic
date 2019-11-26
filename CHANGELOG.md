@@ -41,11 +41,11 @@ Don't treat \<b style=font-weight: normal> as strong when parsing.
 
 Moved into a separate module.
 
-No longer exports the [specs](http://prosemirror.net/docs/ref/version/0.11.0.html#model.NodeSpec) for the nodes and
+No longer exports the [specs](https://prosemirror.net/docs/ref/version/0.11.0.html#model.NodeSpec) for the nodes and
 marks separately, since they are now plain objects, not subclasses.
-They are still exported through [nodes](http://prosemirror.net/docs/ref/version/0.11.0.html#schema-basic.nodes) and
-[marks](http://prosemirror.net/docs/ref/version/0.11.0.html#schema-basic.marks) objects.
+They are still exported through [nodes](https://prosemirror.net/docs/ref/version/0.11.0.html#schema-basic.nodes) and
+[marks](https://prosemirror.net/docs/ref/version/0.11.0.html#schema-basic.marks) objects.
 
-The list-related nodes were moved to the [schema-list](http://prosemirror.net/docs/ref/version/0.11.0.html#schema-list)
+The list-related nodes were moved to the [schema-list](https://prosemirror.net/docs/ref/version/0.11.0.html#schema-list)
 module.
 
