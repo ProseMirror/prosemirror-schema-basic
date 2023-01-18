@@ -1,3 +1,9 @@
+## 1.2.1 (2023-01-18)
+
+### Bug fixes
+
+Add parse rules to clear `em` and `strong` marks for styles that reset font style/weight.
+
 ## 1.2.0 (2022-05-30)
 
 ### New features
