@@ -1,6 +1,6 @@
 {
   "name": "prosemirror-schema-basic",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Basic schema elements for ProseMirror",
   "type": "module",
   "main": "dist/index.cjs",

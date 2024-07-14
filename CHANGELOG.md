@@ -1,3 +1,9 @@
+## 1.2.3 (2024-07-14)
+
+### Bug fixes
+
+Add attribute type validation for headings, images, and link marks.
+
 ## 1.2.2 (2023-05-17)
 
 ### Bug fixes
