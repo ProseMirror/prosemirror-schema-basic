@@ -40,7 +40,7 @@ export const nodes = {
   /// should hold the number 1 to 6. Parsed and serialized as `<h1>` to
   /// `<h6>` elements.
   heading: {
-    attrs: {level: {default: 1}},
+    attrs: {level: {default: 1, validate: "number"}},
     content: "inline*",
     group: "block",
     defining: true,
@@ -77,9 +77,9 @@ export const nodes = {
   image: {
     inline: true,
     attrs: {
-      src: {},
-      alt: {default: null},
-      title: {default: null}
+      src: {validate: "string"},
+      alt: {default: null, validate: "string|null"},
+      title: {default: null, validate: "string|null"}
     },
     group: "inline",
     draggable: true,
@@ -112,8 +112,8 @@ export const marks = {
   /// element.
   link: {
     attrs: {
-      href: {},
-      title: {default: null}
+      href: {validate: "string"},
+      title: {default: null, validate: "string|null"}
     },
     inclusive: false,
     parseDOM: [{tag: "a[href]", getAttrs(dom: HTMLElement) {
