@@ -150,6 +150,7 @@ export const marks = {
 
   /// Code font mark. Represented as a `<code>` element.
   code: {
+    code: true,
     parseDOM: [{tag: "code"}],
     toDOM() { return codeDOM }
   } as MarkSpec
